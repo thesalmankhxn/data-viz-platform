@@ -1,5 +1,5 @@
 import { useAppContext } from "@/providers/app-provider";
-import { useEffect, useState } from "react";
+import { useState, useRef } from "react";
 import {
   AIStars,
   AIStarsSm,
@@ -116,9 +116,11 @@ export const VariablePanel: React.FC = () => {
 const VariableTag: React.FC<{ variable: Variable }> = ({ variable }) => {
   const { updateVariable, setSelectedVariable } = useAppContext();
   const [showDescription, setShowDescription] = useState(false);
-  const [hoverTimer, setHoverTimer] = useState<NodeJS.Timeout | null>(null);
-  const [hideTimer, setHideTimer] = useState<NodeJS.Timeout | null>(null);
   const [isHovered, setIsHovered] = useState(false);
+
+  // Use refs for timers so they persist across renders
+  const hoverTimer = useRef<NodeJS.Timeout | null>(null);
+  const hideTimer = useRef<NodeJS.Timeout | null>(null);
 
   const handleClick = () => {
     updateVariable(variable.id, { selected: !variable.selected });
@@ -126,40 +128,43 @@ const VariableTag: React.FC<{ variable: Variable }> = ({ variable }) => {
 
   const handleMouseEnter = () => {
     setIsHovered(true);
-    if (hideTimer) {
-      clearTimeout(hideTimer);
-      setHideTimer(null);
+    // Clear any existing hide timer
+    if (hideTimer.current) {
+      clearTimeout(hideTimer.current);
+      hideTimer.current = null;
     }
     if (variable.description && !showDescription) {
-      const timer = setTimeout(() => {
+      hoverTimer.current = setTimeout(() => {
         setShowDescription(true);
         setSelectedVariable(variable);
       }, 1000);
-      setHoverTimer(timer);
     }
   };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
-    if (hoverTimer) {
-      clearTimeout(hoverTimer);
-      setHoverTimer(null);
+    // Clear hover timer if still waiting
+    if (hoverTimer.current) {
+      clearTimeout(hoverTimer.current);
+      hoverTimer.current = null;
     }
+    // Set hide timer if description is showing
     if (showDescription) {
-      const timer = setTimeout(() => {
+      hideTimer.current = setTimeout(() => {
         setShowDescription(false);
         setSelectedVariable(null);
       }, 2000);
-      setHideTimer(timer);
     }
   };
 
-  useEffect(() => {
-    return () => {
-      if (hoverTimer) clearTimeout(hoverTimer);
-      if (hideTimer) clearTimeout(hideTimer);
-    };
-  }, [hoverTimer, hideTimer]);
+  // Cleanup timers on unmount (function component form)
+  // This is a React pattern for cleanup without useEffect
+  if (typeof window !== "undefined") {
+    window.addEventListener("unload", () => {
+      if (hoverTimer.current) clearTimeout(hoverTimer.current);
+      if (hideTimer.current) clearTimeout(hideTimer.current);
+    });
+  }
 
   const getButtonClasses = () => {
     const base =

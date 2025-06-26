@@ -36,79 +36,79 @@ export const generateChartData = (): DataPoint[] => [
 ];
 
 export const VARIABLE_CATEGORIES = [
-  "Environmental Impact",
-  "Transportation Metrics",
-  "Operations Management",
+  "Variable category 1",
+  "Variable category 2",
+  "Variable category 3",
 ];
 export const initialVariables: Variable[] = [
   {
     id: "1",
-    name: "Carbon Emissions",
-    category: "Environmental Impact",
+    name: "Carbon 1",
+    category: "Variable category 1",
     selected: true,
     description:
       "Measures the total carbon dioxide equivalent emissions from all fleet vehicles. This metric helps track environmental performance and compliance with sustainability goals.",
   },
   {
     id: "2",
-    name: "CO2 Distribution Network",
-    category: "Environmental Impact",
+    name: "CO2 Distribution",
+    category: "Variable category 1",
     selected: true,
     description:
-      "Analyzes the spatial distribution of carbon emissions across different routes and service areas. Essential for identifying high-emission zones and optimizing environmental impact.",
+      "Analyzes the spatial distribution of carbon emissions across different routes and service areas. Essential for identifying high-emission zones and optimizing Variable category 1.",
   },
   {
     id: "3",
-    name: "Fleet Optimization",
-    category: "Environmental Impact",
+    name: "Fleet Sizing",
+    category: "Variable category 1",
     selected: true,
     description:
-      "Determines the optimal number and type of vehicles needed to meet demand while minimizing environmental impact. Balances service quality with sustainability objectives.",
+      "Determines the optimal number and type of vehicles needed to meet demand while minimizing Variable category 1. Balances service quality with sustainability objectives.",
   },
   {
     id: "4",
-    name: "Parking Utilization Rate",
-    category: "Transportation Metrics",
+    name: "Parking Rate",
+    category: "Variable category 2",
     selected: false,
     description:
       "Tracks the percentage of available parking spaces being utilized across different time periods and locations. Critical for understanding capacity constraints.",
   },
   {
     id: "5",
-    name: "Border Crossing Frequency",
-    category: "Transportation Metrics",
+    name: "Border Rate",
+    category: "Variable category 2",
     selected: true,
     description:
       "Measures how often vehicles cross predefined geographical boundaries or service zones. Important for route optimization and jurisdictional compliance.",
   },
   {
     id: "6",
-    name: "Service Request Volume",
-    category: "Transportation Metrics",
+    name: "Request Rate",
+    category: "Variable category 2",
     selected: true,
     description:
       "Quantifies the number of service requests received per time period. Key indicator for demand forecasting and capacity planning.",
   },
   {
     id: "7",
-    name: "Route Efficiency Index",
-    category: "Transportation Metrics",
+    name: "Variable 1",
+    category: "Variable category 2",
     selected: false,
     description:
       "Composite metric measuring the efficiency of vehicle routes based on distance, time, and fuel consumption. Higher values indicate more optimized routing.",
   },
   {
     id: "8",
-    name: "Operational Downtime",
-    category: "Operations Management",
+    name: "Variable 2",
+    category: "Variable category 3",
     selected: true,
     description:
       "Tracks the total time vehicles or systems are unavailable for service due to maintenance, repairs, or other operational issues. Critical for reliability planning.",
   },
   {
     id: "9",
-    name: "Resource Allocation Score",
-    category: "Operations Management",
+    name: "Variable 3",
+    category: "Variable category 3",
     selected: false,
     description:
       "Evaluates how effectively resources (vehicles, drivers, maintenance) are distributed across service areas. Higher scores indicate better resource utilization.",
