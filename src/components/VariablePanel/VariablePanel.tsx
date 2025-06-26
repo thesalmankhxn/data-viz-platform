@@ -10,7 +10,6 @@ import {
   PlusSm,
   Rerun,
   Search,
-  ButtonShadow,
 } from "@/components/Icons";
 import ButtonWithIcon from "@/components/button-with-icon";
 import type { Variable } from "@/lib/constants";
@@ -119,18 +118,18 @@ const VariableTag: React.FC<{ variable: Variable }> = ({ variable }) => {
   const [showDescription, setShowDescription] = useState(false);
   const [hoverTimer, setHoverTimer] = useState<NodeJS.Timeout | null>(null);
   const [hideTimer, setHideTimer] = useState<NodeJS.Timeout | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleClick = () => {
     updateVariable(variable.id, { selected: !variable.selected });
   };
 
   const handleMouseEnter = () => {
-    // Clear any existing hide timer
+    setIsHovered(true);
     if (hideTimer) {
       clearTimeout(hideTimer);
       setHideTimer(null);
     }
-
     if (variable.description && !showDescription) {
       const timer = setTimeout(() => {
         setShowDescription(true);
@@ -141,13 +140,11 @@ const VariableTag: React.FC<{ variable: Variable }> = ({ variable }) => {
   };
 
   const handleMouseLeave = () => {
-    // Clear hover timer if still waiting
+    setIsHovered(false);
     if (hoverTimer) {
       clearTimeout(hoverTimer);
       setHoverTimer(null);
     }
-
-    // Set hide timer if description is showing
     if (showDescription) {
       const timer = setTimeout(() => {
         setShowDescription(false);
@@ -157,20 +154,30 @@ const VariableTag: React.FC<{ variable: Variable }> = ({ variable }) => {
     }
   };
 
-  // Cleanup timers on unmount
   useEffect(() => {
     return () => {
       if (hoverTimer) clearTimeout(hoverTimer);
       if (hideTimer) clearTimeout(hideTimer);
     };
   }, [hoverTimer, hideTimer]);
+
+  const getButtonClasses = () => {
+    const base =
+      "px-6 py-2 rounded-full h-[33px] text-xs font-light border flex items-center gap-3 relative transition-all duration-200";
+    if (variable.selected) {
+      let selectedClass =
+        "bg-[#23291E] border-b border-[#C9FF3B] text-[#C9FF3B]";
+      if (isHovered) {
+        selectedClass += " shadow-[-1px_6px_16px_0px_rgba(59,255,114,0.23)]";
+      }
+      return `${base} ${selectedClass}`;
+    }
+    return `${base} bg-[#23291E] border-[#D5D5D5] text-[#D5D5D5] hover:text-white`;
+  };
+
   return (
     <button
-      className={`px-3 py-1.5 rounded-full h-[33px] text-xs font-light border flex items-center gap-1.5 group relative ${
-        variable.selected
-          ? "bg-[#CCFF001A]/10 text-[var(--variable-accent)] border-[var(--variable-accent-border)]"
-          : "bg-bg-primary-light text-[#D5D5D5] border-border-primary hover:text-white"
-      }`}
+      className={getButtonClasses()}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -186,13 +193,13 @@ const VariableSection: React.FC<{ title: string }> = ({ title }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="border border-border_primary rounded-md bg-[#0E0D0D] text-text_secondary">
+    <div className="border border-border_primary rounded-md bg-[#0E0D0D] text-[var(--variable-accent)]">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full flex items-center justify-between py-2 px-5 text-left"
       >
         <span className="text-md font-normal">{title}</span>
-        <span className="rotate-180 border border-text_primary rounded-[20px] py-0.5 px-2">
+        <span className="rotate-180 border border-[var(--variable-accent)] rounded-[20px] py-0.5 px-2">
           <Chevrron />
         </span>
       </button>

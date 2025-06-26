@@ -383,60 +383,6 @@ export const ChevronDown = () => (
   </svg>
 );
 
-export const ButtonShadow = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="100%"
-    height="22"
-    viewBox="0 0 167 22"
-    fill="none"
-  >
-    <g opacity="0.21" filter="url(#filter0_f_1_2676)">
-      <ellipse
-        cx="83.5"
-        cy="11"
-        rx="76.5"
-        ry="4"
-        fill="url(#paint0_linear_1_2676)"
-      />
-    </g>
-    <defs>
-      <filter
-        id="filter0_f_1_2676"
-        x="0.3"
-        y="0.3"
-        width="166.4"
-        height="21.4"
-        filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
-      >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-        <feBlend
-          mode="normal"
-          in="SourceGraphic"
-          in2="BackgroundImageFix"
-          result="shape"
-        />
-        <feGaussianBlur
-          stdDeviation="3.35"
-          result="effect1_foregroundBlur_1_2676"
-        />
-      </filter>
-      <linearGradient
-        id="paint0_linear_1_2676"
-        x1="7"
-        y1="11"
-        x2="160"
-        y2="11"
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stop-color="#3BFF72" />
-        <stop offset="0.52" stop-color="#C9FF3B" />
-      </linearGradient>
-    </defs>
-  </svg>
-);
-
 export const Google = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24">
     <path
