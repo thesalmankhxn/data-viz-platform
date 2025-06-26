@@ -1,6 +1,7 @@
 import React from "react";
 import { X } from "lucide-react";
-import { useAppStore, Variable } from "../../provider/appProvider";
+import { useAppContext } from "@/providers/app-provider";
+import type { Variable } from "@/lib/constants";
 
 interface VariableTagProps {
   variable: Variable;
@@ -8,7 +9,7 @@ interface VariableTagProps {
 }
 
 const VariableTag: React.FC<VariableTagProps> = ({ variable, onHover }) => {
-  const { updateVariable } = useAppStore();
+  const { updateVariable } = useAppContext();
 
   const handleRemove = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -47,5 +48,4 @@ const VariableTag: React.FC<VariableTagProps> = ({ variable, onHover }) => {
     </div>
   );
 };
-
 export default VariableTag;

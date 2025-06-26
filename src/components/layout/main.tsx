@@ -5,6 +5,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { useEffect, useMemo } from "react";
 import { getSidebarStateFromCookie } from "@/lib/utils";
 import { TopSection } from "../top-section";
+import { VariablePanel } from "../VariablePanel/VariablePanel";
 
 /**
  * MainLayout component serves as the primary layout wrapper for the application.
@@ -41,6 +42,9 @@ export function MainLayout() {
           <Outlet />
         </div>
       </main>
+
+      {/* Render VariablePanel for variable editing functionality */}
+      <VariablePanel />
     </SidebarProvider>
   );
 }

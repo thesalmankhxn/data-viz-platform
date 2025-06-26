@@ -2,7 +2,7 @@ import React from "react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
 }
@@ -15,7 +15,7 @@ const ButtonWithIcon: React.FC<ButtonProps> = ({
   ...buttonProps
 }) => {
   const baseClasses =
-    "bg-bg_primary_light border border-border_primary p-2 rounded-lg text-white text-sm font-normal flex items-center gap-2 font-robert transition-transform duration-100 active:scale-95";
+    "bg-[#242424] border border-border_primary p-2 rounded-lg text-white text-sm font-normal flex items-center gap-2 font-robert transition-transform duration-100 active:scale-95";
 
   return (
     <button className={`  ${className} ${baseClasses}`} {...buttonProps}>

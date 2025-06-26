@@ -11,20 +11,20 @@ const ScenarioResults = ({ expanded = true }: ScenarioResultsProps) => {
   const [scenarioExpanded, setScenarioExpanded] = useState(expanded);
 
   return (
-    <div className="mb-6">
+    <div className="mb-10">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center space-x-2">
           <span className="text-[var(--variable-accent)] text-lg font-medium flex items-center gap-2">
-            <div className="w-4 h-4">
+            <div className="w-[18px] h-[18px]">
               <AIStars />
             </div>
-            Best Scenario Results
+            <span className="text-2xl font-medium">Best Scenario Results</span>
           </span>
         </div>
         <Button
           variant="ghost"
           size="icon"
-          className="rounded-full bg-black/20 h-6 w-6 border border-[var(--variable-accent)]"
+          className="rounded-full bg-black/20 w-[44px] h-[34px] border border-[var(--variable-accent)]"
           onClick={() => setScenarioExpanded(!scenarioExpanded)}
         >
           {scenarioExpanded ? (
@@ -51,7 +51,7 @@ const ScenarioResults = ({ expanded = true }: ScenarioResultsProps) => {
 
 const ScenarioResult = ({ text }: { text: string }) => {
   return (
-    <div className="border border-[var(--variable-accent)] bg-black/20 rounded-md p-3 md:p-4 mb-3 flex justify-between items-center transition-all duration-300 hover:bg-black/30">
+    <div className="h-14 !border-[0.5px] border-[var(--variable-accent)] bg-black/20 rounded-md p-3 md:p-4 mb-3 flex justify-between items-center transition-all duration-300 hover:bg-black/30">
       <p className="text-[var(--variable-accent)] text-sm md:text-base pr-2">
         {text}
       </p>

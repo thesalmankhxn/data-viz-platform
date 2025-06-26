@@ -2,20 +2,19 @@
 
 import ButtonWithIcon from "@/components/button-with-icon";
 import ChartVisualization from "@/components/dashboard/ChartVisualization";
-import { PlusSm, Zap } from "@/components/Icons";
+import { PlusSm, Refresh, Zap } from "@/components/Icons";
 import KPICard from "@/components/dashboard/KPICard";
 import ScenarioResults from "@/components/dashboard/scenario-results";
 import { Button } from "@/components/ui/button";
-import { VariableSelectButton } from "@/components/dashboard/variable-select-button";
 import { kpiData } from "@/lib/constants";
-import { Plus, RefreshCw, Upload } from "lucide-react";
+import { Plus, Upload } from "lucide-react";
 import { useAppContext } from "@/providers/app-provider";
 
 const Dashboard = () => {
   const { toggleVariablePanel } = useAppContext();
 
   return (
-    <div className="flex-1 sm:p-6 p-5 space-y-8 overflow-y-auto md:border-l border-t border-[#525252] md:rounded-tl-md bg-bg_primary flex flex-col">
+    <div className="h-full sm:p-6 p-5 space-y-8 overflow-y-auto md:overflow-y-hidden md:border-l border-t border-[#525252] md:rounded-tl-md bg-[#161618] flex flex-col">
       <div className="flex-1 p-6 overflow-auto">
         {/*  Dashboard Header */}
         <div className="flex items-center justify-between mb-14">
@@ -23,16 +22,17 @@ const Dashboard = () => {
             <div className="w-8 h-8">
               <Zap />
             </div>
-            <h1 className="text-3xl font-bold text-white">Charging Station</h1>
+            <h1 className="text-[32px] font-bold font-roobert text-white">
+              Charging Station
+            </h1>
           </div>
-          <div className="flex items-center space-x-2">
-            <VariableSelectButton icon={<RefreshCw className="h-4 w-4" />} />
-            <VariableSelectButton
-              onClick={toggleVariablePanel}
-              text="Variables"
-              icon={<Plus className="h-4 w-4" />}
-            />
-            <VariableSelectButton icon={<Upload className="h-4 w-4" />} />
+          <div className="flex items-center space-x-3">
+            <ButtonWithIcon iconLeft={<Refresh />} />
+            <ButtonWithIcon onClick={toggleVariablePanel}>
+              Edit Variables
+            </ButtonWithIcon>
+
+            <ButtonWithIcon iconLeft={<Upload />} />
           </div>
         </div>
 
@@ -40,7 +40,7 @@ const Dashboard = () => {
         <ScenarioResults />
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-5 gap-6 flex-1 sm:space-y-0 space-y-5 h-full">
+        <div className="grid grid-cols-1 xl:grid-cols-5 gap-6 flex-1 sm:space-y-0 space-y-5">
           {/* Chart Section */}
           <div className="md:col-span-3 space-y-4 h-full flex flex-col">
             <h3 className="text-2xl leading-5 font-semibold text-white font-robert">

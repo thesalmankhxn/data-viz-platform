@@ -260,7 +260,7 @@ const ChartVisualization: React.FC = () => {
 
             const glowColor = "#DCFF7F"; // Outer glow
             const innerColor = "#222324"; // Inner black dot
-            const radius = 6;
+            const radius = 3;
             const borderWidth = 3;
 
             ctx.save();
@@ -286,6 +286,31 @@ const ChartVisualization: React.FC = () => {
             ctx.restore();
           },
         },
+        {
+          id: "extendAxes",
+          afterDraw(chart) {
+            const ctx = chart.ctx;
+            const { left, right, top, bottom } = chart.chartArea;
+
+            ctx.save();
+            ctx.strokeStyle = "#525252";
+            ctx.lineWidth = 1.5;
+
+            // Extend Y axis (vertical) a bit above the chart area
+            ctx.beginPath();
+            ctx.moveTo(left, bottom + 0); // bottom
+            ctx.lineTo(left, top - 20); // extend 8px above
+            ctx.stroke();
+
+            // Extend X axis (horizontal) a bit beyond the chart area
+            ctx.beginPath();
+            ctx.moveTo(left - 0, bottom); // extend 8px left
+            ctx.lineTo(right + 8, bottom); // extend 8px right
+            ctx.stroke();
+
+            ctx.restore();
+          },
+        },
       ],
     };
 
@@ -298,7 +323,7 @@ const ChartVisualization: React.FC = () => {
   }, []);
 
   return (
-    <div className="max-h-[449px] sm:bg-bg_primary_light sm:rounded-xl sm:border sm:border-border_primary md:p-8 sm:p-4  relative h-full flex flex-col">
+    <div className="max-h-[449px] sm:bg-[#222324] sm:rounded-xl sm:border sm:border-border_primary md:p-8 sm:p-4  relative h-full flex flex-col">
       <div className="sm:flex hidden items-center justify-end  relative">
         <button className=" bg-bg_primary border border-border_primary rounded-md px-2.5 py-2 text-xs text-[#FCFCFC] focus:outline-none flex relative bottom-3 right-4  items-center gap-4">
           Unsatisfied Demand %
@@ -313,7 +338,7 @@ const ChartVisualization: React.FC = () => {
 
         {hoveredDataPoint && tooltipPosition && (
           <div
-            className="absolute bg-bg_primary_light backdrop-blur-sm border border-border_primary rounded-lg sm:p-4 p-2 shadow-xl z-10 transition-opacity duration-200 min-w-fit sm:space-y-3 space-y-1"
+            className="absolute bg-primary_light backdrop-blur-sm border border-border_primary rounded-lg sm:p-4 p-2 shadow-xl z-10 transition-opacity duration-200 min-w-fit sm:space-y-3 space-y-1"
             style={{
               left: isMpbile
                 ? tooltipPosition.x + 160 >

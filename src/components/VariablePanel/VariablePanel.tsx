@@ -41,7 +41,7 @@ export const VariablePanel: React.FC = () => {
       />
 
       <div
-        className={`fixed md:w-1/2 w-full overflow-auto top-0 right-0 bg-black border-l border-border_primary z-50 transform transition-transform duration-300 ease-out p-6 flex flex-col h-full space-y-6 ${
+        className={`fixed md:w-1/2 w-full overflow-auto top-0 right-0 bg-black border-l border-border-primary z-50 transform transition-transform duration-300 ease-out p-6 flex flex-col h-full space-y-6 ${
           isVariablePanelOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -53,7 +53,7 @@ export const VariablePanel: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 w-full">
-          <div className="flex items-center space-x-4 flex-1 bg-bg_primary p-2 border-border_primary rounded-md">
+          <div className="flex items-center space-x-4 flex-1 bg-bg-primary p-2 border-border-primary rounded-md">
             <Search />
             <input
               type="text"
@@ -64,12 +64,12 @@ export const VariablePanel: React.FC = () => {
           <ButtonWithIcon className="px-4" iconLeft={<AIStars />}>
             Autofill
           </ButtonWithIcon>
-          <button className="text-text_primary gradient-border-button flex items-center gap-2 border-[1px] px-4 py-1.5 rounded-md  border-text_primary bg-[#23291E]  rerun active:scale-95">
+          <button className="text-text-primary gradient-border-button flex items-center gap-2 border-[1px] px-4 py-1.5 rounded-md  border-text-primary bg-[#23291E]  rerun active:scale-95">
             <Rerun /> Rerun
           </button>
         </div>
 
-        <div className="space-y-10 bg-bg_primary border border-border_primary h-fit rounded-md">
+        <div className="space-y-10 bg-bg-primary border border-border-primary h-fit rounded-md">
           <div
             className={`space-y-6 pt-6 ${descriptionToShow ? "pb-0" : "pb-6"}`}
           >
@@ -93,14 +93,14 @@ export const VariablePanel: React.FC = () => {
                   ? "opacity-100 translate-y-0 pointer-events-auto p-5 space-y-3"
                   : "opacity-0 translate-y-2 pointer-events-none h-0"
               }
-              bg-bg_primary_light   border-t border-border_primary rounded-b-md
+              bg-bg-primary-light   border-t border-border-primary rounded-b-md
             `}
             >
               <div className="flex items-center gap-3">
                 <h1 className="text-white">{selectedVariable?.name}</h1>
                 <Info />
               </div>
-              <p className="text-sm text-text_light">{descriptionToShow}</p>
+              <p className="text-sm text-text-light">{descriptionToShow}</p>
             </div>
           </div>
         </div>
@@ -168,8 +168,8 @@ const VariableTag: React.FC<{ variable: Variable }> = ({ variable }) => {
     <button
       className={`px-3 py-1.5 rounded-full text-xs font-light border flex items-center gap-1.5 group relative ${
         variable.selected
-          ? "bg-[#CCFF001A]/10 text-text_primary border-text_primary"
-          : "bg-bg_primary_light text-[#D5D5D5] border-border_primary hover:text-white"
+          ? "bg-[#CCFF001A]/10 text-text-primary border-text-primary"
+          : "bg-bg-primary-light text-[#D5D5D5] border-border-primary hover:text-white"
       }`}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
