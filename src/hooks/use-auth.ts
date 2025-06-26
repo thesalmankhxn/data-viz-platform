@@ -30,11 +30,6 @@ export const useAuth = () => {
    */
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      console.log(
-        "onAuthStateChanged fired, user:",
-        user ? user.email : "null"
-      );
-
       if (user) {
         try {
           // Get the user's ID token
@@ -43,8 +38,6 @@ export const useAuth = () => {
 
           // Save profile data to store
           setProfileFromFirebaseUser(user);
-
-          console.log("User authenticated:", user.email);
         } catch (error) {
           console.error("Error getting user token:", error);
           logoutFromStore();
@@ -52,10 +45,8 @@ export const useAuth = () => {
         }
       } else {
         // User is signed out
-        console.log("User signed out, clearing stores...");
         logoutFromStore();
         clearProfile();
-        console.log("Stores cleared successfully");
       }
     });
 

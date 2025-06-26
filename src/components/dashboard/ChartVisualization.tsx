@@ -113,7 +113,6 @@ const ChartVisualization: React.FC = () => {
 
               const dataPoint = tooltipModel.dataPoints?.[0];
               if (dataPoint) {
-                console.log("✅ Tooltip active at index", dataPoint.dataIndex);
                 setHoveredDataPoint(chartData[dataPoint.dataIndex]);
                 setTooltipPosition({
                   x: dataPoint.element.x,
@@ -124,6 +123,8 @@ const ChartVisualization: React.FC = () => {
           },
         },
         onHover: (event: ChartEvent, active: ActiveElement[]) => {
+          console.log("🟡 event", event);
+          console.log("🟡 active", active);
           if (active.length === 0) {
             setHoveredDataPoint(null);
             setTooltipPosition(null);
