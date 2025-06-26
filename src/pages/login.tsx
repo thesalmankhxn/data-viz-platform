@@ -9,34 +9,92 @@ import {
 import { GithubIcon, GoogleIcon } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import { EyeOff } from "lucide-react";
-import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
+import { useState } from "react";
+
+/**
+ * Form data interface for login
+ */
+interface LoginFormData {
+  email: string;
+  password: string;
+}
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: Implement login logic
-    console.log("Login attempt:", { email, password });
+  const {
+    isLoading,
+    loginWithEmailPassword,
+    loginWithGoogle,
+    loginWithGithub,
+  } = useAuth();
+
+  /**
+   * React Hook Form setup with validation
+   */
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    reset,
+  } = useForm<LoginFormData>({
+    mode: "onChange", // Validate on change for better UX
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  /**
+   * Handles form submission for email/password login
+   */
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      await loginWithEmailPassword(data.email, data.password);
+
+      // Reset form on successful login
+      reset();
+
+      // Redirect is handled in the useAuth hook
+    } catch (error) {
+      // Error handling is done in the hook
+      console.error("Login failed:", error);
+    }
   };
 
-  const handleGoogleLogin = () => {
-    console.log("Google login");
+  /**
+   * Handles Google OAuth login
+   */
+  const handleGoogleLogin = async () => {
+    try {
+      await loginWithGoogle();
+      // Redirect is handled in the useAuth hook
+    } catch (error) {
+      console.error("Google login failed:", error);
+    }
   };
 
-  const handleGithubLogin = () => {
-    console.log("Github login");
+  /**
+   * Handles GitHub OAuth login
+   */
+  const handleGithubLogin = async () => {
+    try {
+      await loginWithGithub();
+      // Redirect is handled in the useAuth hook
+    } catch (error) {
+      console.error("GitHub login failed:", error);
+    }
   };
 
   return (
     <form
       className="w-full h-svh flex items-center justify-center"
-      // onSubmit={handleUserPasswordLogin}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <Card className="max-w-sm w-full">
         <CardHeader>
@@ -52,36 +110,45 @@ const Login = () => {
               <Input
                 id="email"
                 type="email"
-                name="email"
-                placeholder="m@example.com"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="tylerdurden@fightclub.com"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Please enter a valid email address",
+                  },
+                })}
+                className={cn(errors.email && "border-red-500")}
               />
+              {errors.email && (
+                <span className="text-sm text-red-500">
+                  {errors.email.message}
+                </span>
+              )}
             </div>
 
             <div className="grid gap-2">
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
                 <Link
-                  href="/forgot-password"
+                  to="/forgot-password"
                   className="ml-auto inline-block text-sm underline"
                   tabIndex={-1}
                 >
                   Forgot your password?
                 </Link>
-              </div>
+              </div> */}
 
               <div className="flex gap-1">
                 <Input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="password"
-                  autoComplete="password"
-                  name="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
+                  className={cn(errors.password && "border-red-500")}
                 />
                 <Button
                   variant="outline"
@@ -89,13 +156,23 @@ const Login = () => {
                   size="icon"
                   tabIndex={-1}
                   className="px-2"
+                  onClick={() => setShowPassword(!showPassword)}
                 >
-                  <EyeOff />
+                  {showPassword ? <Eye /> : <EyeOff />}
                 </Button>
               </div>
+              {errors.password && (
+                <span className="text-sm text-red-500">
+                  {errors.password.message}
+                </span>
+              )}
             </div>
 
-            <Button type="submit" className="w-full" onClick={handleSubmit}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isLoading || !isValid}
+            >
               Login
             </Button>
           </div>
@@ -120,9 +197,9 @@ const Login = () => {
               className={cn("w-full gap-2")}
               type="button"
               onClick={handleGoogleLogin}
-              // disabled={googleLoginMutation.isPending}
+              disabled={isLoading}
             >
-              {false ? <Spinner /> : <GoogleIcon />}
+              <GoogleIcon />
               Sign in with Google
             </Button>
             <Button
@@ -130,9 +207,9 @@ const Login = () => {
               className={cn("w-full gap-2")}
               type="button"
               onClick={handleGithubLogin}
-              // disabled={githubLoginMutation.isPending}
+              disabled={isLoading}
             >
-              {false ? <Spinner /> : <GithubIcon />}
+              <GithubIcon />
               Sign in with Github
             </Button>
           </div>

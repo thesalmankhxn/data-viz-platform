@@ -15,79 +15,105 @@ import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { GithubIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { useAuth } from "@/hooks/use-auth";
+import { Show } from "@/components/show";
+
+/**
+ * Form data interface for signup
+ */
+interface SignupFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+}
+
 /**
  * Signup page component that handles user registration
  */
 export default function SignupPage() {
-  const navigate = useNavigate();
+  const {
+    isLoading,
+    signupWithEmailPassword,
+    loginWithGoogle,
+    loginWithGithub,
+  } = useAuth();
 
-  // useLoggedInRedirect();
+  /**
+   * React Hook Form setup with validation
+   */
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    watch,
+    reset,
+  } = useForm<SignupFormData>({
+    mode: "onChange", // Validate on change for better UX
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      passwordConfirmation: "",
+    },
+  });
 
-  // const signUpMutation = useMutation({
-  //     mutationFn: async (data: {
-  //         firstName: string;
-  //         lastName: string;
-  //         email: string;
-  //         password: string;
-  //         image?: string;
-  //     }) => {
-  //         // const response = await authClient.signUp.email({
-  //         //     email: data.email,
-  //         //     password: data.password,
-  //         //     name: `${data.firstName} ${data.lastName}`,
-  //         //     callbackURL,
-  //         // });
+  // Watch password for confirmation validation
+  const password = watch("password");
 
-  //         // return handleAuthResponse(response);
-  //     },
-  //     onSuccess: () => {
-  //         toast("A verification email has been sent to your email address.", {
-  //             description: "Please verify your email.",
-  //         });
+  /**
+   * Handles form submission for email/password signup
+   */
+  const onSubmit = async (data: SignupFormData) => {
+    try {
+      await signupWithEmailPassword(
+        data.email,
+        data.password,
+        data.firstName,
+        data.lastName
+      );
 
-  //         router.push("/");
-  //     },
-  // });
+      // Reset form on successful signup
+      reset();
 
-  // const googleLoginMutation = useGoogleLoginMutation({
-  //     callbackURL,
-  // });
-
-  // const githubLoginMutation = useGithubLoginMutation({
-  //     callbackURL,
-  // });
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const passwordConfirmation = formData.get("passwordConfirmation") as string;
-    const firstName = formData.get("firstName") as string;
-    const lastName = formData.get("lastName") as string;
-
-    if (password !== passwordConfirmation) {
-      toast.error("Passwords do not match");
-      return;
+      // Redirect is handled in the useAuth hook
+    } catch (error) {
+      // Error handling is done in the hook
+      console.error("Signup failed:", error);
     }
-
-    console.log(firstName, lastName, email, password, passwordConfirmation);
   };
 
-  const handleGoogleLogin = () => {
-    // googleLoginMutation.mutate();
+  /**
+   * Handles Google OAuth signup
+   */
+  const handleGoogleSignup = async () => {
+    try {
+      await loginWithGoogle();
+      // Redirect is handled in the useAuth hook
+    } catch (error) {
+      console.error("Google signup failed:", error);
+    }
   };
 
-  const handleGithubLogin = () => {
-    // githubLoginMutation.mutate();
+  /**
+   * Handles GitHub OAuth signup
+   */
+  const handleGithubSignup = async () => {
+    try {
+      await loginWithGithub();
+      // Redirect is handled in the useAuth hook
+    } catch (error) {
+      console.error("GitHub signup failed:", error);
+    }
   };
 
   return (
     <form
       className="w-full h-svh flex items-center justify-center"
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <Card className="z-50 rounded-md rounded-t-none max-w-md">
         <CardHeader>
@@ -100,24 +126,53 @@ export default function SignupPage() {
           <div className="grid gap-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="first-name">First name</Label>
+                <Label htmlFor="firstName">First name</Label>
                 <Input
-                  id="first-name"
-                  placeholder="John"
-                  required
-                  name="firstName"
-                  autoFocus
+                  id="firstName"
+                  placeholder="Tyler"
+                  {...register("firstName", {
+                    required: "First name is required",
+                    minLength: {
+                      value: 2,
+                      message: "First name must be at least 2 characters",
+                    },
+                    maxLength: {
+                      value: 50,
+                      message: "First name must be less than 50 characters",
+                    },
+                  })}
+                  className={cn(errors.firstName && "border-red-500")}
                 />
+                <Show when={!!errors.firstName} fallback={null}>
+                  <span className="text-sm text-red-500">
+                    {errors.firstName?.message}
+                  </span>
+                </Show>
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="last-name">Last name</Label>
+                <Label htmlFor="lastName">Last name</Label>
                 <Input
-                  id="last-name"
-                  placeholder="Snow"
-                  required
-                  name="lastName"
+                  id="lastName"
+                  placeholder="Durden"
+                  {...register("lastName", {
+                    required: "Last name is required",
+                    minLength: {
+                      value: 2,
+                      message: "Last name must be at least 2 characters",
+                    },
+                    maxLength: {
+                      value: 50,
+                      message: "Last name must be less than 50 characters",
+                    },
+                  })}
+                  className={cn(errors.lastName && "border-red-500")}
                 />
+                <Show when={!!errors.lastName} fallback={null}>
+                  <span className="text-sm text-red-500">
+                    {errors.lastName?.message}
+                  </span>
+                </Show>
               </div>
             </div>
 
@@ -126,10 +181,21 @@ export default function SignupPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="m@example.com"
-                required
-                name="email"
+                placeholder="tylerdurden@fightclub.com"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Please enter a valid email address",
+                  },
+                })}
+                className={cn(errors.email && "border-red-500")}
               />
+              <Show when={!!errors.email} fallback={null}>
+                <span className="text-sm text-red-500">
+                  {errors.email?.message}
+                </span>
+              </Show>
             </div>
 
             <div className="grid gap-2">
@@ -139,30 +205,54 @@ export default function SignupPage() {
                 type="password"
                 autoComplete="new-password"
                 placeholder="Password"
-                name="password"
-                required
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                  pattern: {
+                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+                    message:
+                      "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+                  },
+                })}
+                className={cn(errors.password && "border-red-500")}
               />
+              <Show when={!!errors.password} fallback={null}>
+                <span className="text-sm text-red-500">
+                  {errors.password?.message}
+                </span>
+              </Show>
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="password">Confirm Password</Label>
+              <Label htmlFor="passwordConfirmation">Confirm Password</Label>
               <Input
-                id="password_confirmation"
+                id="passwordConfirmation"
                 type="password"
-                name="passwordConfirmation"
                 autoComplete="new-password"
                 placeholder="Confirm Password"
-                required
+                {...register("passwordConfirmation", {
+                  required: "Please confirm your password",
+                  validate: (value) =>
+                    value === password || "Passwords do not match",
+                })}
+                className={cn(errors.passwordConfirmation && "border-red-500")}
               />
+              <Show when={!!errors.passwordConfirmation} fallback={null}>
+                <span className="text-sm text-red-500">
+                  {errors.passwordConfirmation?.message}
+                </span>
+              </Show>
             </div>
 
             <Button
               type="submit"
               className="w-full"
-              // disabled={signUpMutation.isPending}
+              disabled={isLoading || !isValid}
             >
-              {/* {signUpMutation.isPending && <Spinner />} */}
-              Create an account
+              {isLoading ? <Spinner /> : "Create an account"}
             </Button>
           </div>
 
@@ -181,20 +271,20 @@ export default function SignupPage() {
               variant="outline"
               className={cn("w-full gap-2")}
               type="button"
-              onClick={handleGoogleLogin}
-              // disabled={googleLoginMutation.isPending}
+              onClick={handleGoogleSignup}
+              disabled={isLoading}
             >
-              {false ? <Spinner /> : <GoogleIcon />}
+              {isLoading ? <Spinner /> : <GoogleIcon />}
               Sign up with Google
             </Button>
             <Button
               variant="outline"
               className={cn("w-full gap-2")}
               type="button"
-              onClick={handleGithubLogin}
-              // disabled={githubLoginMutation.isPending}
+              onClick={handleGithubSignup}
+              disabled={isLoading}
             >
-              {false ? <Spinner /> : <GithubIcon />}
+              {isLoading ? <Spinner /> : <GithubIcon />}
               Sign up with Github
             </Button>
           </div>
