@@ -27,12 +27,15 @@ const Dashboard = () => {
             </h1>
           </div>
           <div className="flex items-center space-x-3">
-            <ButtonWithIcon iconLeft={<Refresh />} />
-            <ButtonWithIcon onClick={toggleVariablePanel}>
+            <ButtonWithIcon className="!rounded-sm" iconLeft={<Refresh />} />
+            <ButtonWithIcon
+              className="!rounded-sm"
+              onClick={toggleVariablePanel}
+            >
               Edit Variables
             </ButtonWithIcon>
 
-            <ButtonWithIcon iconLeft={<Upload />} />
+            <ButtonWithIcon className="!rounded-sm" iconLeft={<Upload />} />
           </div>
         </div>
 

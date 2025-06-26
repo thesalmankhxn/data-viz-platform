@@ -41,41 +41,41 @@ export const VariablePanel: React.FC = () => {
       />
 
       <div
-        className={`fixed md:w-1/2 w-full overflow-auto top-0 right-0 bg-black border-l border-border-primary z-50 transform transition-transform duration-300 ease-out p-6 flex flex-col h-full space-y-6 ${
+        className={`fixed md:w-1/2 w-full overflow-auto top-0 right-0 bg-[#0E0D0D] border-l border-border-primary z-50 transform transition-transform duration-300 ease-out p-6 flex flex-col h-full space-y-6 ${
           isVariablePanelOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-white">Edit Variables</h2>
+          <h2 className="text-2xl text-white">Edit Variables</h2>
           <button onClick={toggleVariablePanel} className="p-2 rounded-lg">
             <Cross />
           </button>
         </div>
 
         <div className="flex items-center gap-2 w-full">
-          <div className="flex items-center space-x-4 flex-1 bg-bg-primary p-2 border-border-primary rounded-md">
+          <div className="flex items-center space-x-4 flex-1 bg-bg-primary p-2 border-[0.67px] border-[#5A5A5A] rounded-sm h-[38px]">
             <Search />
             <input
               type="text"
               placeholder="Search variables"
-              className="rounded-lg text-sm w-full placeholder:text-white bg-transparent focus:outline-none"
+              className="rounded-sm text-sm w-full placeholder:text-white bg-transparent focus:outline-none"
             />
           </div>
           <ButtonWithIcon className="px-4" iconLeft={<AIStars />}>
             Autofill
           </ButtonWithIcon>
-          <button className="text-text-primary gradient-border-button flex items-center gap-2 border-[1px] px-4 py-1.5 rounded-md  border-text-primary bg-[#23291E]  rerun active:scale-95">
+          <button className="text-text-primary gradient-border-button flex items-center gap-2 border-[1px] px-4 py-1.5 rounded-sm  border-text-primary bg-[#23291E]  rerun active:scale-95">
             <Rerun /> Rerun
           </button>
         </div>
 
-        <div className="space-y-10 bg-bg-primary border border-border-primary h-fit rounded-md">
+        <div className="space-y-10 bg-[#161618] border border-border-primary h-fit rounded-md">
           <div
             className={`space-y-6 pt-6 ${descriptionToShow ? "pb-0" : "pb-6"}`}
           >
             {categorizedVariables.map(({ category, variables }) => (
               <div className="px-6" key={category}>
-                <h3 className="text-sm font-light text-[#D5D5D5] mb-3">
+                <h3 className="!text-[15px] font-light text-[#D5D5D5] mb-3">
                   {category}
                 </h3>
                 <div className="flex flex-wrap gap-2 mb-3">
@@ -166,9 +166,9 @@ const VariableTag: React.FC<{ variable: Variable }> = ({ variable }) => {
   }, [hoverTimer, hideTimer]);
   return (
     <button
-      className={`px-3 py-1.5 rounded-full text-xs font-light border flex items-center gap-1.5 group relative ${
+      className={`px-3 py-1.5 rounded-full h-[33px] text-xs font-light border flex items-center gap-1.5 group relative ${
         variable.selected
-          ? "bg-[#CCFF001A]/10 text-text-primary border-text-primary"
+          ? "bg-[#CCFF001A]/10 text-[var(--variable-accent)] border-[var(--variable-accent-border)]"
           : "bg-bg-primary-light text-[#D5D5D5] border-border-primary hover:text-white"
       }`}
       onClick={handleClick}
@@ -178,11 +178,6 @@ const VariableTag: React.FC<{ variable: Variable }> = ({ variable }) => {
       {variable.name}
       <AIStarsSm />
       {variable.selected ? <Check /> : <PlusSm />}
-      {variable.selected && (
-        <span className="absolute -bottom-3 left-0 group-hover:visible invisible">
-          <ButtonShadow />
-        </span>
-      )}
     </button>
   );
 };
@@ -191,7 +186,7 @@ const VariableSection: React.FC<{ title: string }> = ({ title }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="border border-border_primary rounded-md bg-bg_primary_light text-text_secondary">
+    <div className="border border-border_primary rounded-md bg-[#0E0D0D] text-text_secondary">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full flex items-center justify-between py-2 px-5 text-left"
